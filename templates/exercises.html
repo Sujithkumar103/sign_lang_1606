@@ -1,0 +1,315 @@
+{% extends "layout.html" %}
+
+{% block title %}Exercises - Sign Language Learning Platform{% endblock %}
+
+{% block content %}
+<div class="exercises-container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h1 class="h2 card-title mb-3">Sign Language Exercises</h1>
+                    <p class="text-muted">Practice your sign language skills with these interactive exercises. Choose a category to get started.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Category Navigation Pills -->
+    <div class="mb-4">
+        <ul class="nav nav-pills category-pills">
+            <li class="nav-item">
+                <a class="nav-link active" href="#all-categories" data-bs-toggle="pill">All Categories</a>
+            </li>
+            {% if 'Alphabet' in categories %}
+            <li class="nav-item">
+                <a class="nav-link" href="#alphabet" data-bs-toggle="pill">
+                    <i class="fas fa-font me-1"></i> Alphabet
+                </a>
+            </li>
+            {% endif %}
+            {% if 'Numbers' in categories %}
+            <li class="nav-item">
+                <a class="nav-link" href="#numbers" data-bs-toggle="pill">
+                    <i class="fas fa-sort-numeric-up me-1"></i> Numbers
+                </a>
+            </li>
+            {% endif %}
+            {% if 'Greetings' in categories %}
+            <li class="nav-item">
+                <a class="nav-link" href="#greetings" data-bs-toggle="pill">
+                    <i class="fas fa-hand-paper me-1"></i> Greetings
+                </a>
+            </li>
+            {% endif %}
+            {% if 'Common Phrases' in categories %}
+            <li class="nav-item">
+                <a class="nav-link" href="#common-phrases" data-bs-toggle="pill">
+                    <i class="fas fa-comment-dots me-1"></i> Common Phrases
+                </a>
+            </li>
+            {% endif %}
+            {% if 'Questions' in categories %}
+            <li class="nav-item">
+                <a class="nav-link" href="#questions" data-bs-toggle="pill">
+                    <i class="fas fa-question-circle me-1"></i> Questions
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    
+    {% if categories %}
+        <div class="tab-content">
+            <!-- All Categories Tab -->
+            <div class="tab-pane fade show active" id="all-categories">
+                <div class="row exercise-categories">
+                    {% for category in categories %}
+                        <div class="col-lg-6 mb-4">
+                            <div class="card shadow-sm category-card h-100">
+                                <div class="card-header category-header {% if category == 'Alphabet' %}bg-primary text-white{% elif category == 'Numbers' %}bg-success text-white{% elif category == 'Greetings' %}bg-info text-white{% elif category == 'Common Phrases' %}bg-warning{% elif category == 'Emotions' %}bg-danger text-white{% elif category == 'Questions' %}bg-secondary text-white{% endif %}">
+                                    <div class="category-icon">
+                                        {% if category == 'Alphabet' %}
+                                            <i class="fas fa-font fa-lg"></i>
+                                        {% elif category == 'Numbers' %}
+                                            <i class="fas fa-sort-numeric-up fa-lg"></i>
+                                        {% elif category == 'Greetings' %}
+                                            <i class="fas fa-hand-paper fa-lg"></i>
+                                        {% elif category == 'Common Phrases' %}
+                                            <i class="fas fa-comment-dots fa-lg"></i>
+                                        {% elif category == 'Emotions' %}
+                                            <i class="fas fa-smile fa-lg"></i>
+                                        {% elif category == 'Questions' %}
+                                            <i class="fas fa-question-circle fa-lg"></i>
+                                        {% else %}
+                                            <i class="fas fa-sign-language fa-lg"></i>
+                                        {% endif %}
+                                    </div>
+                                    <h3 class="card-title h5 mb-0">{{ category }}</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text mb-3">Practice signing {{ category.lower() }} in sign language.</p>
+                                    
+                                    {% if exercises_data[category] %}
+                                        <div class="exercise-items">
+                                            <div class="list-group">
+                                                {% for exercise in exercises_data[category][:5] %}
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                        <div class="exercise-name">
+                                                            <span>{{ exercise.word }}</span>
+                                                            <span class="badge badge-{{ category|lower|replace(' ', '-') }} ms-2">
+                                                                {{ exercise.difficulty }}
+                                                            </span>
+                                                        </div>
+                                                        <a href="{{ url_for('exercises') }}?category={{ category }}&word={{ exercise.word }}" class="btn btn-sm btn-primary">Practice</a>
+                                                    </div>
+                                                {% endfor %}
+                                                
+                                                {% if exercises_data[category]|length > 5 %}
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center text-muted">
+                                                        <em>{{ exercises_data[category]|length - 5 }} more exercises available</em>
+                                                        <a href="{{ url_for('exercises') }}?category={{ category }}" class="btn btn-sm btn-outline-secondary">View All</a>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="alert alert-light text-center">
+                                            <p class="mb-0"><em>No exercises available for this category yet.</em></p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Individual Category Tabs -->
+            {% for category in categories %}
+                {% set category_id = category|lower|replace(' ', '-') %}
+                <div class="tab-pane fade" id="{{ category_id }}">
+                    <div class="card shadow-sm">
+                        <div class="card-header {% if category == 'Alphabet' %}bg-primary text-white{% elif category == 'Numbers' %}bg-success text-white{% elif category == 'Greetings' %}bg-info text-white{% elif category == 'Common Phrases' %}bg-warning{% elif category == 'Emotions' %}bg-danger text-white{% elif category == 'Questions' %}bg-secondary text-white{% endif %}">
+                            <h3 class="h4 mb-0">
+                                {% if category == 'Alphabet' %}
+                                    <i class="fas fa-font me-2"></i>
+                                {% elif category == 'Numbers' %}
+                                    <i class="fas fa-sort-numeric-up me-2"></i>
+                                {% elif category == 'Greetings' %}
+                                    <i class="fas fa-hand-paper me-2"></i>
+                                {% elif category == 'Common Phrases' %}
+                                    <i class="fas fa-comment-dots me-2"></i>
+                                {% elif category == 'Emotions' %}
+                                    <i class="fas fa-smile me-2"></i>
+                                {% elif category == 'Questions' %}
+                                    <i class="fas fa-question-circle me-2"></i>
+                                {% else %}
+                                    <i class="fas fa-sign-language me-2"></i>
+                                {% endif %}
+                                {{ category }} Signs
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-4">Practice and master {{ category.lower() }} in sign language. Select any item below to start practicing.</p>
+                            
+                            {% if exercises_data[category] %}
+                                <div class="row">
+                                    {% for exercise in exercises_data[category] %}
+                                        <div class="col-md-4 col-lg-3 mb-3">
+                                            <div class="card h-100 exercise-detail-card">
+                                                <div class="card-body text-center">
+                                                    <h5 class="card-title">{{ exercise.word }}</h5>
+                                                    <p class="badge badge-{{ category|lower|replace(' ', '-') }}">
+                                                        {{ exercise.difficulty }}
+                                                    </p>
+                                                </div>
+                                                <div class="card-footer bg-transparent text-center">
+                                                    <a href="{{ url_for('exercises') }}?category={{ category }}&word={{ exercise.word }}" class="btn btn-primary">Practice Now</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-light text-center">
+                                    <p class="mb-0"><em>No exercises available for this category yet.</em></p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center py-5 mt-4">
+            <i class="fas fa-exclamation-circle fa-3x mb-3"></i>
+            <p class="mb-0">No exercise categories available yet. Check back soon for updated content.</p>
+        </div>
+    {% endif %}
+    
+    <div class="card bg-light mt-5">
+        <div class="card-body p-4 text-center">
+            <h2 class="h3 mb-3">Can't Find What You're Looking For?</h2>
+            <p class="mb-4">If you'd like to request a specific sign language concept or category to be added to our exercises, please let us know.</p>
+            <button class="btn btn-primary btn-lg" id="request-btn">
+                <i class="fas fa-plus-circle me-2"></i> Request New Content
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Request Modal -->
+<div class="modal fade" id="request-modal" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="requestModalLabel">Request New Content</h5>
+                <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="request-category" class="form-label">Category</label>
+                    <input type="text" class="form-control" id="request-category" placeholder="e.g., Medical Terms, Directions, Colors">
+                </div>
+                <div class="mb-3">
+                    <label for="request-description" class="form-label">What would you like to learn?</label>
+                    <textarea class="form-control" id="request-description" rows="4" placeholder="Tell us what sign language content you'd like to see..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="submit-request">Submit Request</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Request modal functionality
+        const requestBtn = document.getElementById('request-btn');
+        const requestModal = document.getElementById('request-modal');
+        const submitRequest = document.getElementById('submit-request');
+
+        // Initialize Bootstrap modal
+        const requestModalElement = new bootstrap.Modal(requestModal);
+        
+        if (requestBtn) {
+            requestBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                requestModalElement.show();
+            });
+        }
+        
+        if (submitRequest) {
+            submitRequest.addEventListener('click', function() {
+                const category = document.getElementById('request-category').value;
+                const description = document.getElementById('request-description').value;
+                
+                // Show a nicer Bootstrap alert instead of using alert()
+                if (category) {
+                    // Create alert element
+                    const alertElement = document.createElement('div');
+                    alertElement.className = 'alert alert-success alert-dismissible fade show';
+                    alertElement.setAttribute('role', 'alert');
+                    alertElement.innerHTML = `
+                        <strong>Thank you!</strong> We will consider adding content for <strong>${category}</strong>.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    `;
+                    
+                    // Insert after the header
+                    const headerElement = document.querySelector('.card.shadow-sm');
+                    headerElement.insertAdjacentElement('afterend', alertElement);
+                    
+                    // Hide modal
+                    requestModalElement.hide();
+                    
+                    // Clear form
+                    document.getElementById('request-category').value = '';
+                    document.getElementById('request-description').value = '';
+                    
+                    // Auto-remove the alert after 5 seconds
+                    setTimeout(() => {
+                        alertElement.classList.remove('show');
+                        setTimeout(() => {
+                            alertElement.remove();
+                        }, 150);
+                    }, 5000);
+                } else {
+                    // Alert user to fill in category
+                    alert('Please enter a category name.');
+                }
+            });
+        }
+        
+        // Add custom styles for category cards
+        const categoryCards = document.querySelectorAll('.category-card');
+        categoryCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.classList.add('shadow');
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.classList.remove('shadow');
+            });
+        });
+        
+        // Add custom styles for exercise detail cards
+        const exerciseCards = document.querySelectorAll('.exercise-detail-card');
+        exerciseCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.classList.add('shadow');
+                this.querySelector('.btn-primary').classList.add('btn-lg');
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.classList.remove('shadow');
+                this.querySelector('.btn-primary').classList.remove('btn-lg');
+            });
+        });
+    });
+</script>
+{% endblock %}

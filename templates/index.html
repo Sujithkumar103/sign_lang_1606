@@ -1,0 +1,222 @@
+{% extends "layout.html" %}
+
+{% block title %}Sign Language Learning Platform{% endblock %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-body p-0">
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1>Learn Sign Language</h1>
+                <p>An accessible learning platform for visual and hearing impaired students</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary btn-lg" id="start-translate-btn">
+                        <i class="fas fa-sign-language mr-2"></i> Start Learning
+                    </a>
+                    <a href="{{ url_for('exercises') }}" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-graduation-cap mr-2"></i> Practice Exercises
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section id="translate-section" class="translate-section">
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <h2 class="h4 m-0 font-weight-bold text-primary">
+                <i class="fas fa-sign-language mr-2"></i> Sign Language Translator
+            </h2>
+        </div>
+        <div class="card-body">
+            <div class="split-container">
+                <div class="split-left">
+                    <h2 class="text-center">Enter Text or Use Mic</h2>
+                    <div class="form-group mb-4">
+                        <textarea id="input-text" class="form-control" rows="4" placeholder="Type your text here..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions mb-3">
+                        <button id="translate-btn" class="btn btn-primary">
+                            <i class="fas fa-language mr-1"></i> Translate
+                        </button>
+                        <button id="speak-btn" class="btn btn-secondary">
+                            <i class="fas fa-volume-up mr-1"></i> Speak Text
+                        </button>
+                        <button id="record-btn" class="btn btn-info mic-button">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button id="stop-record-btn" class="btn btn-danger hidden">
+                            <i class="fas fa-stop"></i>
+                        </button>
+                        <button id="clear-btn" class="btn btn-outline-secondary">Clear</button>
+                    </div>
+                    
+                    <div id="status-message" class="status-message hidden"></div>
+                    
+                    <div class="translated-words mt-3">
+                        <h3 class="h5 mb-3">Words in Translation:</h3>
+                        <div id="word-list" class="word-list"></div>
+                    </div>
+                    
+                    <div id="learning-phrases" class="learning-phrases">
+                        <h3 class="h5 mb-3">Popular Phrases</h3>
+                        <div class="phrase-buttons">
+                            <button class="phrase-btn" data-phrase="Hello, how are you?">Hello, how are you?</button>
+                            <button class="phrase-btn" data-phrase="Thank you">Thank you</button>
+                            <button class="phrase-btn" data-phrase="Please help me">Please help me</button>
+                            <button class="phrase-btn" data-phrase="Where is the bathroom?">Where is the bathroom?</button>
+                            <button class="phrase-btn" data-phrase="I need help">I need help</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="split-right">
+                    <h2 class="text-center">Sign Language Animation</h2>
+                    <div class="video-player-container">
+                        <div id="video-loading" class="video-loading hidden">
+                            <div class="spinner video-spinner"></div>
+                            <p>Loading sign language videos...</p>
+                        </div>
+                        <div id="video-empty-state" class="video-empty-state">
+                            <i class="fas fa-sign-language fa-4x mb-3 text-muted"></i>
+                            <p class="text-muted">Enter text and click translate to see sign language videos</p>
+                        </div>
+                        <video id="videoPlayer" class="video-player hidden" preload="auto" autoplay>
+                            <source src="" type="video/mp4">
+                            Your browser does not support HTML5 video.
+                        </video>
+                        <div class="video-controls mt-3">
+                            <button id="play-pause-btn" class="btn btn-primary">
+                                <i class="fas fa-play"></i> Play/Pause
+                            </button>
+                            <button id="restart-btn" class="btn btn-secondary">
+                                <i class="fas fa-redo"></i> Restart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="features" class="features-section mt-5">
+    <div class="text-center mb-4">
+        <h2 class="h1 mb-3">Our Features</h2>
+        <p class="lead text-muted mb-4">Discover all the tools to help you learn sign language effectively</p>
+    </div>
+    
+    <div class="row features-grid">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Text to Sign Language</h3>
+                    <p class="card-text">Convert any text to sign language gestures with our video demonstrations.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Speech to Sign</h3>
+                    <p class="card-text">Record your voice and see it translated into sign language in real-time.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Text to Speech</h3>
+                    <p class="card-text">Listen to text being read aloud to support your sign language learning.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Interactive Learning</h3>
+                    <p class="card-text">Practice sign language with exercises and track your progress.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Speech Recognition Modal -->
+<div class="modal fade" id="speech-modal" tabindex="-1" aria-labelledby="speechModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="speechModalLabel">Speech Recognition</h5>
+                <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div class="speech-status">
+                    <div id="recording-animation" class="recording-animation mb-3">
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                        <div class="circle"></div>
+                    </div>
+                    <p id="speech-status-text" class="lead">Speak now...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]:not(#start-translate-btn)').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Handle start learning button - focus on the text area
+        const startTranslateBtn = document.getElementById('start-translate-btn');
+        if (startTranslateBtn) {
+            startTranslateBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const inputTextArea = document.getElementById('input-text');
+                if (inputTextArea) {
+                    // Focus on the text area and scroll to it
+                    inputTextArea.focus();
+                    inputTextArea.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            });
+        }
+        
+        // Load popular phrases
+        initLearningPhrases();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,376 @@
+{% extends "layout.html" %}
+
+{% block title %}Sign Language Quizzes - Sign Language Learning Platform{% endblock %}
+
+{% block content %}
+<div class="quiz-container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h1 class="h2 card-title mb-3">Test Your Sign Language Knowledge</h1>
+                    <p class="text-muted">Challenge yourself with interactive quizzes to reinforce your sign language skills.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quiz Types Section -->
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 quiz-type-card" data-quiz-type="recognition">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">
+                        <i class="fas fa-eye me-2"></i> Sign Recognition
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p>Watch a sign language video and choose the correct word or phrase it represents.</p>
+                    <div class="quiz-difficulty">
+                        <span class="difficulty-label">Difficulty:</span>
+                        <div class="btn-group my-3" role="group">
+                            <input type="radio" class="btn-check" name="recognition-difficulty" id="recognition-beginner" value="beginner" checked>
+                            <label class="btn btn-outline-success" for="recognition-beginner">Beginner</label>
+                            
+                            <input type="radio" class="btn-check" name="recognition-difficulty" id="recognition-intermediate" value="intermediate">
+                            <label class="btn btn-outline-warning" for="recognition-intermediate">Intermediate</label>
+                            
+                            <input type="radio" class="btn-check" name="recognition-difficulty" id="recognition-advanced" value="advanced">
+                            <label class="btn btn-outline-danger" for="recognition-advanced">Advanced</label>
+                        </div>
+                    </div>
+                    <div class="quiz-categories mb-3">
+                        <span class="category-label">Categories:</span>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="all" id="recognition-all" checked>
+                            <label class="form-check-label" for="recognition-all">
+                                All Categories
+                            </label>
+                        </div>
+                        {% for category in categories %}
+                        <div class="form-check">
+                            <input class="form-check-input recognition-category" type="checkbox" value="{{ category }}" id="recognition-{{ category|lower|replace(' ', '-') }}">
+                            <label class="form-check-label" for="recognition-{{ category|lower|replace(' ', '-') }}">
+                                {{ category }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-primary start-quiz-btn" data-quiz-type="recognition">
+                        <i class="fas fa-play me-2"></i> Start Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 quiz-type-card" data-quiz-type="matching">
+                <div class="card-header bg-info text-white">
+                    <h3 class="h5 mb-0">
+                        <i class="fas fa-sync-alt me-2"></i> Sign Matching
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p>Match sign language videos with their corresponding words or phrases.</p>
+                    <div class="quiz-difficulty">
+                        <span class="difficulty-label">Difficulty:</span>
+                        <div class="btn-group my-3" role="group">
+                            <input type="radio" class="btn-check" name="matching-difficulty" id="matching-beginner" value="beginner" checked>
+                            <label class="btn btn-outline-success" for="matching-beginner">Beginner</label>
+                            
+                            <input type="radio" class="btn-check" name="matching-difficulty" id="matching-intermediate" value="intermediate">
+                            <label class="btn btn-outline-warning" for="matching-intermediate">Intermediate</label>
+                            
+                            <input type="radio" class="btn-check" name="matching-difficulty" id="matching-advanced" value="advanced">
+                            <label class="btn btn-outline-danger" for="matching-advanced">Advanced</label>
+                        </div>
+                    </div>
+                    <div class="quiz-categories mb-3">
+                        <span class="category-label">Categories:</span>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="all" id="matching-all" checked>
+                            <label class="form-check-label" for="matching-all">
+                                All Categories
+                            </label>
+                        </div>
+                        {% for category in categories %}
+                        <div class="form-check">
+                            <input class="form-check-input matching-category" type="checkbox" value="{{ category }}" id="matching-{{ category|lower|replace(' ', '-') }}">
+                            <label class="form-check-label" for="matching-{{ category|lower|replace(' ', '-') }}">
+                                {{ category }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-info text-white start-quiz-btn" data-quiz-type="matching">
+                        <i class="fas fa-play me-2"></i> Start Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 quiz-type-card" data-quiz-type="translation">
+                <div class="card-header bg-success text-white">
+                    <h3 class="h5 mb-0">
+                        <i class="fas fa-exchange-alt me-2"></i> Sign Translation
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <p>Given a word or phrase, select the correct sign language video that represents it.</p>
+                    <div class="quiz-difficulty">
+                        <span class="difficulty-label">Difficulty:</span>
+                        <div class="btn-group my-3" role="group">
+                            <input type="radio" class="btn-check" name="translation-difficulty" id="translation-beginner" value="beginner" checked>
+                            <label class="btn btn-outline-success" for="translation-beginner">Beginner</label>
+                            
+                            <input type="radio" class="btn-check" name="translation-difficulty" id="translation-intermediate" value="intermediate">
+                            <label class="btn btn-outline-warning" for="translation-intermediate">Intermediate</label>
+                            
+                            <input type="radio" class="btn-check" name="translation-difficulty" id="translation-advanced" value="advanced">
+                            <label class="btn btn-outline-danger" for="translation-advanced">Advanced</label>
+                        </div>
+                    </div>
+                    <div class="quiz-categories mb-3">
+                        <span class="category-label">Categories:</span>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="all" id="translation-all" checked>
+                            <label class="form-check-label" for="translation-all">
+                                All Categories
+                            </label>
+                        </div>
+                        {% for category in categories %}
+                        <div class="form-check">
+                            <input class="form-check-input translation-category" type="checkbox" value="{{ category }}" id="translation-{{ category|lower|replace(' ', '-') }}">
+                            <label class="form-check-label" for="translation-{{ category|lower|replace(' ', '-') }}">
+                                {{ category }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-success start-quiz-btn" data-quiz-type="translation">
+                        <i class="fas fa-play me-2"></i> Start Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quiz History Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h3 class="h5 mb-0">Your Quiz History</h3>
+                </div>
+                <div class="card-body">
+                    <div id="quiz-history-content">
+                        <p class="text-center text-muted">Complete quizzes to see your performance history here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quiz Modal -->
+<div class="modal fade" id="quiz-modal" tabindex="-1" aria-labelledby="quizModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quizModalLabel">Sign Language Quiz</h5>
+                <div class="quiz-progress ms-3">
+                    Question <span id="current-question">1</span>/<span id="total-questions">10</span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Quiz content will be dynamically inserted here -->
+                <div id="quiz-container"></div>
+                
+                <!-- Results page (hidden initially) -->
+                <div id="quiz-results" style="display: none;">
+                    <div class="text-center">
+                        <div class="mb-4">
+                            <i class="fas fa-trophy fa-4x text-warning mb-3"></i>
+                            <h3>Quiz Complete!</h3>
+                        </div>
+                        
+                        <div class="score-display mb-4">
+                            <div class="score-circle">
+                                <span id="score-percentage">0%</span>
+                            </div>
+                            <h4 class="mt-2">Your Score</h4>
+                            <p><span id="correct-answers">0</span> out of <span id="total-questions-result">10</span> correct</p>
+                        </div>
+                        
+                        <button class="btn btn-primary me-2" id="review-answers-btn">
+                            <i class="fas fa-search me-1"></i> Review Answers
+                        </button>
+                        <button class="btn btn-success" id="retake-quiz-btn">
+                            <i class="fas fa-redo me-1"></i> Try Again
+                        </button>
+                    </div>
+                    
+                    <!-- Answer Review Section (hidden initially) -->
+                    <div id="answer-review" class="mt-4" style="display: none;">
+                        <h4 class="review-heading">Review Your Answers</h4>
+                        <div id="review-container" class="review-list"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exit Quiz</button>
+                <button type="button" class="btn btn-primary" id="next-question-btn">Next Question</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Event handler for "All Categories" checkboxes
+        document.querySelectorAll('input[value="all"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const quizType = this.id.split('-')[0];
+                const categoryCheckboxes = document.querySelectorAll(`.${quizType}-category`);
+                
+                if (this.checked) {
+                    categoryCheckboxes.forEach(cb => {
+                        cb.checked = false;
+                        cb.disabled = true;
+                    });
+                } else {
+                    categoryCheckboxes.forEach(cb => {
+                        cb.disabled = false;
+                    });
+                }
+            });
+        });
+        
+        // Initialize all category checkboxes as disabled since "All" is checked by default
+        document.querySelectorAll('input[value="all"]').forEach(checkbox => {
+            if (checkbox.checked) {
+                const quizType = checkbox.id.split('-')[0];
+                const categoryCheckboxes = document.querySelectorAll(`.${quizType}-category`);
+                categoryCheckboxes.forEach(cb => {
+                    cb.disabled = true;
+                });
+            }
+        });
+        
+        // Enable hover effects on quiz type cards
+        const quizCards = document.querySelectorAll('.quiz-type-card');
+        quizCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.classList.add('shadow');
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.classList.remove('shadow');
+            });
+        });
+        
+        // Render quiz history from localStorage
+        renderQuizHistory();
+    });
+    
+    function renderQuizHistory() {
+        const historyContainer = document.getElementById('quiz-history-content');
+        const quizHistory = JSON.parse(localStorage.getItem('sign_language_quiz_history') || '[]');
+        
+        if (quizHistory.length === 0) {
+            return;
+        }
+        
+        // Sort history by date (newest first)
+        quizHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Only show the 5 most recent quizzes
+        const recentHistory = quizHistory.slice(0, 5);
+        
+        let historyHtml = '<div class="table-responsive">';
+        historyHtml += '<table class="table">';
+        historyHtml += `
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Quiz Type</th>
+                    <th>Difficulty</th>
+                    <th>Score</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+        `;
+        
+        recentHistory.forEach(quiz => {
+            const date = new Date(quiz.date);
+            const formattedDate = date.toLocaleDateString();
+            const formattedTime = date.toLocaleTimeString();
+            
+            // Calculate score percentage
+            const scorePercentage = Math.round((quiz.score / quiz.totalQuestions) * 100);
+            
+            // Determine score class based on percentage
+            let scoreClass = '';
+            if (scorePercentage >= 80) {
+                scoreClass = 'text-success';
+            } else if (scorePercentage >= 60) {
+                scoreClass = 'text-warning';
+            } else {
+                scoreClass = 'text-danger';
+            }
+            
+            historyHtml += `
+                <tr>
+                    <td>${formattedDate} ${formattedTime}</td>
+                    <td>${capitalizeFirstLetter(quiz.type)}</td>
+                    <td>${capitalizeFirstLetter(quiz.difficulty)}</td>
+                    <td class="${scoreClass} fw-bold">${quiz.score}/${quiz.totalQuestions} (${scorePercentage}%)</td>
+                    <td>${formatTime(quiz.timeSpent)}</td>
+                </tr>
+            `;
+        });
+        
+        historyHtml += '</tbody></table></div>';
+        historyHtml += `
+            <div class="text-center mt-3">
+                <button id="clear-history-btn" class="btn btn-sm btn-outline-danger">
+                    <i class="fas fa-trash-alt me-1"></i> Clear History
+                </button>
+            </div>
+        `;
+        
+        historyContainer.innerHTML = historyHtml;
+        
+        // Add event listener to clear history button
+        document.getElementById('clear-history-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear your quiz history? This cannot be undone.')) {
+                localStorage.setItem('sign_language_quiz_history', '[]');
+                renderQuizHistory();
+                historyContainer.innerHTML = '<p class="text-center text-muted">Complete quizzes to see your performance history here.</p>';
+            }
+        });
+    }
+    
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    }
+</script>
+{% endblock %}

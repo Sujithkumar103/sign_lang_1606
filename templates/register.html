@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}Register - Sign Language Learner{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Create an Account</h1>
+    <p>Register to track your progress and access all learning features.</p>
+</div>
+
+<div class="auth-form-container">
+    <form class="auth-form" method="POST" action="{{ url_for('register') }}">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="primary-btn">Register</button>
+        </div>
+        <div class="auth-links">
+            <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+        </div>
+    </form>
+</div>
+{% endblock %}
